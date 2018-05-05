@@ -28,6 +28,35 @@ router.get('/', async(req, res) => {
 
 
 })
+
+  //     /api/product/select
+  router.post('/select/:pid', async (req, res) => {
+    //req.body
+    console.log(req.params.pid)
+    let db = req.db
+    let rows = await db('product')
+      .where('pid', '=', req.params.pid)
+    res.send({
+      ok : true,
+      product: rows[0],
+    })  
+    
+    // update product set name=? where pid=1001
+    await db('product').where({pid: req.body.pid}).update({
+      name: req.body.name,
+      detail: req.body.detail,
+      price: req.body.price,
+      img: req.body.img,
+      star1: req.body.star1,
+      star2: req.body.star2,
+      star3: req.body.star3,
+    })
+    res.send({save: true})
+
+
+  })
+
+
   //     /api/product/save
   router.post('/save', async (req, res) => {
     //req.body
@@ -36,6 +65,7 @@ router.get('/', async(req, res) => {
     await db('product').where({pid: req.body.pid}).update({
       name: req.body.name,
       detail: req.body.detail
+
     })
     res.send({save: true})
 
