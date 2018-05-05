@@ -61,10 +61,16 @@ router.get('/', async(req, res) => {
   router.post('/save', async (req, res) => {
     //req.body
     let db = req.db
+    console.log(req.body.pid)
     // update product set name=? where pid=1001
     await db('product').where({pid: req.body.pid}).update({
       name: req.body.name,
-      detail: req.body.detail
+      detail: req.body.detail,
+      price: req.body.price,
+      img: req.body.img,
+      star1: req.body.star1,
+      star2: req.body.star2,
+      star3: req.body.star3,
 
     })
     res.send({save: true})
@@ -76,14 +82,17 @@ router.get('/', async(req, res) => {
     //req.body
     let db = req.db
     // update product set name=? where pid=1001
-    await db('product').insert({
-      pid: '',
-      name: '',
-      detail: '',
-      img: '',
-      star1: '',
-      star2: '',
-      star3: '',
+    console.log("OK")
+    console.log(req.db.name)
+    await db('product').insert({      
+      pid: req.body.pid,
+      name: req.body.name,
+      detail: req.body.detail,
+      price: req.body.price,
+      img: req.body.img,
+      star1: req.body.star1,
+      star2: req.body.star2,
+      star3: req.body.star3,
 
       
     })
@@ -94,12 +103,17 @@ router.get('/', async(req, res) => {
 
 
 
+//  /api/product/delete
+router.post('/delete/:pid', function (req, res) {
+  console.log(req.params.pid)
+  req.db('product').where({pid: req.params.pid}).delete().then(() =>{
+    res.send({status: true})
+  }).catch(e => res.send({status: false, error: e.message}))
+})
 
-// router.delete('/:id', function (req, res) {
-//   req.db('student').where({id: req.params.id}).delete().then(() =>{
-//     res.send({status: true})
-//   }).catch(e => res.send({status: false, error: e.message}))
-// })
+
+
+
 // router.post('/save2', (req, res) => {
 //   let db = req.db  
 //   db('t1').insert({}).then(ids => {
